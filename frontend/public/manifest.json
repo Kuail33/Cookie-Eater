@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Cookies Eater",
-  "version": "1.0.0",
+  "name": "Cookies Eater 2",
+  "version": "1.1.0",
   "description": "Summarize cookies and terms using Gemini",
   "permissions": [
     "scripting",
@@ -15,17 +15,13 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["content.ts"]
-    }
-  ],
   "action": {
     "default_popup": "index.html"
   },
   "icons" : {
-    "32" : "icon32.png"
+    "16" : "icon16.png",
+    "32" : "icon32.png",
+    "48" : "icon48.png",
+    "128" : "icon128.png"
   }
 }
-
