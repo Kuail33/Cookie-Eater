@@ -1,28 +1,63 @@
-.base-button {
+/* ------------ unified button styles ------------ */
+.base-button,
+.translate-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 138px;
   height: 38px;
-  padding: 7px 26px;
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  border-radius: 10px;
+  padding: 7px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
   color: white;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   cursor: pointer;
   transition: background-color 0.2s;
 }
 
 .base-button {
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  font-family: Inter;
+  width: 120px;
 }
-.base-button:hover:not(:disabled) {
+
+.base-button:hover:not(:disabled),
+.translate-button:hover:not(:disabled) {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.base-button.disabled {
+.base-button.disabled,
+.translate-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ------------ translate group ------------ */
+.translate-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.translate-select {
+  height: 38px;
+  padding: 6px 10px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.translate-select:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.translate-select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

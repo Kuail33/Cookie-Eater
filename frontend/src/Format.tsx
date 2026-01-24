@@ -14,13 +14,20 @@ export function formatSummary(summary: string) {
       // Safety score
       <div style={{ fontSize: "14px", lineHeight: "1.6" }}>
         <div style={{ marginBottom: "12px", textAlign: "left"}}>
-          
-          <strong> Safety Score: </strong>{" "}
-          
-          <span style={{ fontSize: "18px", fontWeight: "bold", color: data.safety_score < 60 ? "red" : "green" }}>
-            {data.safety_score}/100
+          <span  style={{ fontWeight: "bold", fontSize: "18px"}}>
+            <strong> Safety Score: </strong>{" "}
+            
+            <span style={{ color: data.safety_score < 60 ? "red" : "green" }}>
+              {data.safety_score}/100
+            </span>
           </span>
         
+        </div>
+
+        {/* Summary */}
+        <div style={{ marginBottom: "12px", textAlign: "left"}}>
+          <strong> Summary: </strong>
+          <p style={{ marginTop: "6px", fontStyle: "italic" }}>{data.brief_summary}</p>
         </div>
 
         {/* flags format */}
@@ -35,11 +42,7 @@ export function formatSummary(summary: string) {
           </div>
         )}
 
-        {/* Summary */}
-        <div style={{ marginBottom: "12px", textAlign: "left"}}>
-          <strong> Summary: </strong>
-          <p style={{ marginTop: "6px", fontStyle: "italic" }}>{data.brief_summary}</p>
-        </div>
+        
 
         {/* Advice */}
         <div style={{textAlign: "left"}}>

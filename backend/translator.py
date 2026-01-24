@@ -13,6 +13,7 @@ def _ensure_genai_configured():
         genai.configure(api_key=api_key)
         setattr(genai, "_configured", True)
 
+
 def _extract_json(text: str) -> Dict[str, Any]:
     raw = text.strip()
     match = re.search(r"\{.*\}", raw, re.DOTALL)
@@ -20,11 +21,15 @@ def _extract_json(text: str) -> Dict[str, Any]:
         raise ValueError("Model did not return valid JSON.")
     return json.loads(match.group(0), strict=False)
 
+
 _LANG_LABEL = {
     "japanese": "Japanese",
     "chinese": "Chinese (Simplified)",
     "korean": "Korean",
+    "spanish": "Spanish",
+    "vietnamese": "Vietnamese"
 }
+
 
 def translate_audit_fields(
     *,
@@ -34,19 +39,8 @@ def translate_audit_fields(
     advice: str,
     flags: List[str],
 ) -> Dict[str, Any]:
-    """
-    Translate already-summarized audit fields into the target language.
-
-    Returns:
-      {
-        "doc_type": str|null,
-        "brief_summary": str,
-        "advice": str,
-        "flags": [str]
-      }
-    """
     if language not in _LANG_LABEL:
-        raise ValueError("language must be one of: japanese, chinese, korean")
+        raise ValueError(f"language must be one of: {', '.join(_LANG_LABEL.keys())}")
 
     _ensure_genai_configured()
 
@@ -87,7 +81,6 @@ RULES:
 
     data = _extract_json(resp.text)
 
-    # minimal validation
     for k in ["doc_type", "brief_summary", "advice", "flags"]:
         if k not in data:
             raise ValueError(f"Missing key: {k}")
