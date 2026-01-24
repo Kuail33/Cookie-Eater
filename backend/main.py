@@ -1,57 +1,60 @@
 import os
-from fastapi import FastAPI  # pyright: ignore[reportMissingImports]
-from fastapi.middleware.cors import CORSMiddleware  # pyright: ignore[reportMissingImports]
-from pydantic import BaseModel  # pyright: ignore[reportMissingImports]
-import google.generativeai as genai  # pyright: ignore[reportMissingImports]
-from dotenv import load_dotenv  # pyright: ignore[reportMissingImports]
+import json
+import re
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import google.generativeai as genai
+from dotenv import load_dotenv
 
-# 1. Load your API Key
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# 2. Initialize FastAPI
 app = FastAPI()
-@app.get("/")
-def read_root():
-    return {"message": "LegalLens API is running! Go to /docs to test."}
-# 3. CRITICAL: Enable CORS 
-# This allows your friend's Chrome Extension to talk to your Python server.
+
+# CORS is still required for the Chrome Extension
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In a real app, you'd specify the extension ID
+    allow_origins=["*"], 
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 4. Define what the data looks like (The "Order Form")
-class LeaseRequest(BaseModel):
+class AuditRequest(BaseModel):
     text: str
 
-# 5. The "Brain" - Talking to Gemini
 @app.post("/analyze")
-async def analyze_lease(request: LeaseRequest):
+async def analyze_universal(request: AuditRequest):
     model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
-    system_instruction="""
-    You are HoyaLegalLens, a concise D.C. Tenant Rights bot. 
-    Analyze lease clauses for students. 
-    Keep responses under 3 short bullet points:
-    1. Status: (Legal / Illegal / Risky)
-    2. Law: (Specific D.C. Code citation)
-    3. Action: (One sentence of advice)
-    Be witty, professional, and very brief.
-    """
-)
+        model_name="gemini-2.5-flash",
+        generation_config={"response_mime_type": "application/json"},
+        system_instruction="""
+        You are 'PolicyPulse', a witty and expert legal auditor.
+        
+        TASK:
+        1. Identify document type.
+        2. Assign a safety_score (0-100).
+        3. If score < 70: Identify up to 3 'Red Flags' (🚩).
+        4. If score >= 70: Return an empty list for flags or use ✅ 'Green Flags'.
+        5. Provide 'brief_summary': A witty, one-sentence vibe check.
+        6. Provide 'advice': Specific, actionable next steps for the user.
+        
+        JSON FORMAT:
+        {
+          "doc_type": "string",
+          "safety_score": number,
+          "flags": ["string"],
+          "brief_summary": "string",
+          "advice": "string"
+        }
+        """
+    )
     
-    prompt = f"""
-    You are a tenant rights lawyer in Washington DC. 
-    Analyze this lease text for 3 specific things:
-    1. Illegal clauses (D.C. specific)
-    2. Hidden fees
-    3. Negotiation advice.
+    response = model.generate_content(f"Audit this: {request.text}")
     
-    Lease text: {request.text}
-    """
+    raw_output = response.text.strip()
+    match = re.search(r'\{.*\}', raw_output, re.DOTALL)
     
-    response = model.generate_content(prompt)
-    return {"analysis": response.text}
+    if match:
+        return json.loads(match.group(0), strict=False)
+    return {"error": "Analysis failed"}
