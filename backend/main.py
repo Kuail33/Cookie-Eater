@@ -3,6 +3,7 @@ import json
 import re
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from translator import translate_audit_fields
 from pydantic import BaseModel
 import google.generativeai as genai
 from dotenv import load_dotenv
@@ -22,6 +23,7 @@ app.add_middleware(
 
 class AuditRequest(BaseModel):
     text: str
+    language: str  # "japanese" | "chinese" | "korean"
 
 @app.post("/analyze")
 async def analyze_universal(request: AuditRequest):
@@ -55,6 +57,20 @@ async def analyze_universal(request: AuditRequest):
     raw_output = response.text.strip()
     match = re.search(r'\{.*\}', raw_output, re.DOTALL)
     
-    if match:
-        return json.loads(match.group(0), strict=False)
-    return {"error": "Analysis failed"}
+    if not match:
+        return {"error": "Analysis failed"}
+
+    data = json.loads(match.group(0), strict=False)
+
+    translated = translate_audit_fields(
+        language=request.language,
+        doc_type=data.get("doc_type"),
+        brief_summary=data.get("brief_summary", ""),
+        advice=data.get("advice", ""),
+        flags=data.get("flags", []),
+    )
+
+    return {
+        **translated,
+        "safety_score": data.get("safety_score"),
+    }
