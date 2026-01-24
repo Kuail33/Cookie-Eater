@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from translator import translate_audit_fields
@@ -23,7 +24,7 @@ app.add_middleware(
 
 class AuditRequest(BaseModel):
     text: str
-    language: str  # "japanese" | "chinese" | "korean"
+    language: Optional[str] = None  # "japanese" | "chinese" | "korean"
 
 @app.post("/analyze")
 async def analyze_universal(request: AuditRequest):
@@ -62,8 +63,12 @@ async def analyze_universal(request: AuditRequest):
 
     data = json.loads(match.group(0), strict=False)
 
+    language = (request.language or "").strip().lower()
+    if not language or language == "english":
+        return data
+
     translated = translate_audit_fields(
-        language=request.language,
+        language=language,
         doc_type=data.get("doc_type"),
         brief_summary=data.get("brief_summary", ""),
         advice=data.get("advice", ""),
