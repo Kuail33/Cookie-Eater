@@ -9,13 +9,15 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: "index.html",
-        main: "src/main.tsx",        
+        main: "src/main.tsx",
         background: "src/background.ts",
         content: "src/content.ts"
       },
       output: {
-        entryFileNames: "[name].js"
-      }
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name]-[hash].js"
+      },
+      preserveEntrySignatures: "strict"
     }
   }
 });

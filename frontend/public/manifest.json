@@ -5,7 +5,8 @@
   "description": "Summarize cookies and terms using Gemini",
   "permissions": [
     "scripting",
-    "storage"
+    "storage",
+    "activeTab"
   ],
   "host_permissions": [
     "http://*/*",

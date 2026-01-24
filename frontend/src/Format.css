@@ -1,0 +1,72 @@
+.summary-container {
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.score-section {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.score-label {
+  font-weight: bold;
+}
+
+.score-value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.score-value.high {
+  color: green;
+}
+
+.score-value.low {
+  color: red;
+}
+
+.flags-section {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.flags-label {
+  font-weight: bold;
+}
+
+.flags-list {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.flag-item {
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.summary-section {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.summary-label {
+  font-weight: bold;
+}
+
+.summary-text {
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.advice-section {
+  text-align: left;
+}
+
+.advice-label {
+  font-weight: bold;
+}
+
+.advice-text {
+  margin-top: 6px;
+}
