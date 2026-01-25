@@ -8,7 +8,7 @@ A Chrome extension that audits legal documents and terms of service using Google
 
 - 🔍 **Instant Policy Analysis** – Paste or upload policy text for real-time audit
 - 🚩 **Safety Scoring** – 0-100 score with AI-identified red flags and green flags
-- 🌐 **Multi-Language Support** – Audit results translated to Japanese, Chinese, Korean, Spanish, Vietnamese, and more
+- 🌐 **Multi-Language Support** – Audit results translated to Japanese, Chinese, Korean, Spanish, and more
 - ⚡ **Fast Feedback** – Powered by Gemini 2.5 Flash for quick responses
 - 🛡️ **Secure** – API key stored server-side; no credentials in frontend
 
@@ -42,6 +42,7 @@ A Chrome extension that audits legal documents and terms of service using Google
 - User risk preference settings
 - Export/shareable summaries
 - Accessibility improvements
+- More language support
 
 ## Installation
 
