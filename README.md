@@ -1,6 +1,6 @@
 # CookieEater – AI-Powered Policy Auditor
 
-Made by Diplomats
+-- Made by Diplomats --
 
 A Chrome extension that audits legal documents and terms of service using Google's Gemini AI. Get instant safety scores, red flags, and actionable advice in your preferred language.
 
