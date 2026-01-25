@@ -2,4 +2,4 @@ fastapi # Fast API
 uvicorn #webserver run time
 python-dotenv #
 pydantic # data evaluation
-google-generativeai # ai
+google-genai # ai

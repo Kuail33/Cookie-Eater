@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from translator import translate_audit_fields
 from pydantic import BaseModel
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse

@@ -13,8 +13,8 @@ if (isLikelyPolicyUrl(currentUrl)) {
   // 2) Otherwise, find a policy link on the page
   const policyLink = findPolicyLinkOnPage();
 
-  if (policyLink) console.log("Policy link found:", policyLink);
-  else console.log("No policy link found on this page");
+  if (policyLink) {console.log("Policy link found:", policyLink)}
+  else {console.log("No policy link found on this page")};
 
   chrome.runtime.sendMessage({
     type: "POLICY_FOUND",
@@ -43,7 +43,7 @@ function findPolicyLinkOnPage(): string | null {
     if (isPolicyLinkText(text)) return link.href;
   }
 
-  return null;
+  return null
 }
 
 // check if link text looks like a policy link

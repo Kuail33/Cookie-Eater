@@ -2,7 +2,7 @@ import os
 import json
 import re
 from typing import Any, Dict, List, Optional
-import google.generativeai as genai
+from google import genai
 
 
 def _ensure_genai_configured():
@@ -15,7 +15,15 @@ def _ensure_genai_configured():
 
 
 def _extract_json(text: str) -> Dict[str, Any]:
-    raw = text.strip()
+    raw = (text or "").strip()
+
+    # 1) Best case: model returns pure JSON
+    try:
+        return json.loads(raw)
+    except Exception:
+        pass
+
+    # 2) Fallback: find first {...} block
     match = re.search(r"\{.*\}", raw, re.DOTALL)
     if not match:
         raise ValueError("Model did not return valid JSON.")
@@ -27,7 +35,7 @@ _LANG_LABEL = {
     "chinese": "Chinese (Simplified)",
     "korean": "Korean",
     "spanish": "Spanish",
-    "vietnamese": "Vietnamese"
+    "vietnamese": "Vietnamese",
 }
 
 
@@ -39,6 +47,15 @@ def translate_audit_fields(
     advice: str,
     flags: List[str],
 ) -> Dict[str, Any]:
+    """
+    Returns:
+      {
+        "doc_type": str|null,
+        "brief_summary": str,
+        "advice": str,
+        "flags": [str]
+      }
+    """
     if language not in _LANG_LABEL:
         raise ValueError(f"language must be one of: {', '.join(_LANG_LABEL.keys())}")
 
@@ -81,6 +98,7 @@ RULES:
 
     data = _extract_json(resp.text)
 
+    # minimal validation + safe defaults
     for k in ["doc_type", "brief_summary", "advice", "flags"]:
         if k not in data:
             raise ValueError(f"Missing key: {k}")

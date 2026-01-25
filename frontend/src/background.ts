@@ -107,8 +107,11 @@ async function handleSummarizeRequest(): Promise<void> {
 
 // ---------- policy found flow ----------
 async function handlePolicyFound(policyLink: string | null): Promise<void> {
+  // Case 1: no policy link found
   if (!policyLink) {
-    await chrome.storage.local.set({ summary: "No policy link found on this page." });
+    await chrome.storage.local.set({
+      summary: "No TOS found. Run Summarize again when there is a TOS."
+    });
     return;
   }
 
@@ -129,11 +132,19 @@ async function handlePolicyFound(policyLink: string | null): Promise<void> {
     }
 
     await chrome.storage.local.set({ summary: "Fetching policy..." });
-
     const summaryJson = await fetchAndSummarizePolicy(cleanLink);
 
-    // Persist audit
+    // If backend returned plain text (error / timeout), do NOT parse as JSON
+    if (!summaryJson.trim().startsWith("{")) {
+      await chrome.storage.local.set({
+        summary: summaryJson,
+      });
+      return;
+    }
+
+    // Parse valid JSON
     const parsed = JSON.parse(summaryJson);
+
     await chrome.storage.local.set({
       summary: summaryJson,
       [auditKey(cleanLink)]: parsed,
@@ -141,6 +152,7 @@ async function handlePolicyFound(policyLink: string | null): Promise<void> {
       lastAudit: parsed,
       translatedLanguage: "english",
     });
+
   } catch (err) {
     console.error("handlePolicyFound failed:", err);
     await chrome.storage.local.set({
