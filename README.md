@@ -1,5 +1,7 @@
 # CookieEater – AI-Powered Policy Auditor
 
+Made by Diplomats
+
 A Chrome extension that audits legal documents and terms of service using Google's Gemini AI. Get instant safety scores, red flags, and actionable advice in your preferred language.
 
 ## Features
@@ -220,7 +222,10 @@ Contributions welcome! Please:
 
 ## Support
 
-- 📧 Email: [khanh.ltn7@gmail.com](mailto:khanh.ltn7@gmail.com)
+- 📧 Email: 
+[nlathi@fandm.edu](mailto:nlathi@fandm.edu)
+[hlinhtet@fandm.edu](mailto:hlinhtet@fandm.edu)
+[mkwon@fandm.edu](mailto:mkwon@fandm.edu)
 - 🐛 Issues: [GitHub Issues](https://github.com/Kuail33/extension-final/issues)
 
 ---
